@@ -9,26 +9,24 @@ var cache = builder.AddRedis("cache")
 
 #region SQL
 var password = builder.AddParameter("sql-password", secret: true);
-var sql = builder.AddSqlServer("sqlserver", password, 60123);
+var sql = builder.AddSqlServer("sqlserver", password, 60123)
+    .WithDataVolume("aspire-demo-sql-data");
+#endregion
 
+#region SEQ
+var seq = builder.AddSeq("seq", 5341)
+    .WithDataVolume("aspire-demo-seq-data");
 #endregion
 
 var api = builder.AddProject<Projects.AspireDemo_Api>("api")
+    .WithReference(seq)
     .WithReference(cache)
     .WithReference(sql);
 
 #region BFF
-if (builder.ExecutionContext.IsPublishMode)
-{
-    builder
-        .AddDockerfile("bffcontainer", "..", "AspireDemo.Bff/Dockerfile")
-        .WithHttpEndpoint(targetPort: 8080)
-        .WithReference(api);
-}
-
 var bff = builder.AddProject<Projects.AspireDemo_Bff>("bff")
             .WithReference(api)
-            .ExcludeFromManifest();
+            .WithReference(seq);
 
 builder.AddNpmApp("web", "../AspireDemo.Web", "dev")
     .WithReference(bff)

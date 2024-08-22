@@ -4,6 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
+builder.AddSeqEndpoint("seq");
 builder.Services.AddHttpForwarder();
 
 var app = builder.Build();

@@ -10,6 +10,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.AddSeqEndpoint("seq");
 builder.AddRedisClient("cache");
 
 var app = builder.Build();
