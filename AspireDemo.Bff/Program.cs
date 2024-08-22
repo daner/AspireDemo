@@ -1,6 +1,21 @@
+using OpenTelemetry.Metrics;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
+
+builder.Services.AddHttpForwarder();
+
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+
+app.UseStaticFiles();
+app.MapDefaultEndpoints();
+
+var group = app.MapGroup("/api");
+
+group.MapForwarder("{*path}", builder.Configuration["services:api:https:0"] ?? "");
+
+app.MapFallbackToFile("index.html");
 
 app.Run();
