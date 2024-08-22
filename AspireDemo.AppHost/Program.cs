@@ -4,13 +4,21 @@ var builder = DistributedApplication.CreateBuilder(args);
 var api = builder.AddProject<Projects.AspireDemo_Api>("api");
 
 #region BFF
-var bff = builder.AddProject<Projects.AspireDemo_Bff>("bff")
-            .WithReference(api);
+if (true) //(builder.ExecutionContext.IsPublishMode)
+{
+    builder
+        .AddDockerfile("bffcontainer", "..", "AspireDemo.Bff/Dockerfile")
+        .WithReference(api);
+}
 
-builder.AddNpmApp("web", "../AspireDemo.Web", "dev")
-    .WithReference(bff)
-    .WithHttpEndpoint(5173, env: "PORT", isProxied: false)
-    .ExcludeFromManifest();
+//var bff = builder.AddProject<Projects.AspireDemo_Bff>("bff")
+//            .WithReference(api)
+//            .ExcludeFromManifest();
+
+//builder.AddNpmApp("web", "../AspireDemo.Web", "dev")
+//    .WithReference(bff)
+//    .WithHttpEndpoint(5173, env: "PORT", isProxied: false)
+//    .ExcludeFromManifest();
 
 #endregion
 
