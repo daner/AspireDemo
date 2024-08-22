@@ -8,9 +8,8 @@ builder.Services.AddHttpForwarder();
 
 var app = builder.Build();
 
-
-app.UseStaticFiles();
 app.MapDefaultEndpoints();
+app.UseStaticFiles();
 
 var group = app.MapGroup("/api");
 
