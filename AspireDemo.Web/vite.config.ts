@@ -7,7 +7,7 @@ export default defineConfig({
     server: {
         proxy: {
             '/api': {
-                target: process.env.services__api__https__0 || process.env.services__bff__https__0,
+                target: process.env.services__bff__https__0 || process.env.services__api__https__0,
                 secure: false,
                 changeOrigin: true,
             }

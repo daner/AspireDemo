@@ -1,4 +1,4 @@
-FROM node:20.12 as build
+FROM node:20.12 AS build
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ COPY . .
 
 RUN npm run build
 
-FROM nginx:alpine
+FROM nginx:alpine AS final
 
 COPY --from=build /app/default.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build /app/dist /usr/share/nginx/html
