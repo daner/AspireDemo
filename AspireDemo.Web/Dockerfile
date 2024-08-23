@@ -1,3 +1,5 @@
+#Example docker file for the scenenario where you dont want or need the BFF pattern and host the react application directly on NGINX
+
 FROM node:20.12 AS build
 
 WORKDIR /app
