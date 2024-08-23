@@ -7,6 +7,13 @@ var cache = builder.AddRedis("cache")
 
 #endregion
 
+#region SEQ
+
+var seq = builder.AddSeq("seq", 5341)
+    .WithDataVolume("aspire-demo-seq-data");
+
+#endregion
+
 #region SQL
 
 var password = builder.AddParameter("sql-password", secret: true);
@@ -14,12 +21,9 @@ var sql = builder.AddSqlServer("sqlserver", password, 60123)
     .WithDataVolume("aspire-demo-sql-data")
     .AddDatabase("aspiredemo");
 
-#endregion
-
-#region SEQ
-
-var seq = builder.AddSeq("seq", 5341)
-    .WithDataVolume("aspire-demo-seq-data");
+builder.AddProject<Projects.AspireDemo_MigrationService>("migrationservice")
+    .WithReference(sql)
+    .WithReference(seq);
 
 #endregion
 

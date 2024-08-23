@@ -1,49 +1,36 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+import Navbar from './components/Navbar.tsx'
 
-function App() {
-    const [count, setCount] = useState(0)
-    const [weather, setWeather] = useState([])        
+import {NavigationItem} from "./models/Navigation.ts";
+import Weather from "./components/Weather.tsx";
+import Dashboard from "./components/Dashboard.tsx";
+import Messages from "./components/Messages.tsx";
+import Search from "./components/Search.tsx";
 
-    useEffect(() => {
-        axios.get("/api/weatherforecast").then(result => {
-            setWeather(result.data)
-        })
-    }, [])
+const navigation: NavigationItem[] = [
+    {name: 'Dashboard', href: '/'},
+    {name: 'Weather', href: '/weather'},
+    {name: 'Search', href: '/search'},
+    {name: 'Messages', href: '/messages'},
+]
+
+const App = () => {
 
     return (
         <>
-            <div>
-                <a href="https://vitejs.dev" target="_blank">
-                    <img src={viteLogo} className="logo" alt="Vite logo" />
-                </a>
-                <a href="https://react.dev" target="_blank">
-                    <img src={reactLogo} className="logo react" alt="React logo" />
-                </a>
-            </div>
-            <h1>Vite + React</h1>
-            <div className="card">
-                <button onClick={() => setCount((count) => count + 1)}>
-                    count is {count}
-                </button>
-                <p>
-                    Edit <code>src/App.tsx</code> and save to test HMR
-                </p>
-            </div>
-            <div>
-                <table>
-                    <thead>
-                    <tr><th>Date</th><th>Summary</th><th>Temp</th></tr>
-                </thead>
-                    <tbody>
-                        {weather.map((item :any, i) => (
-                            <tr key={i}><td>{item.date}</td><td>{item.summary}</td><td>{ item.temperatureC }</td></tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+            <Router>
+                <div className="min-h-full">
+                    <Navbar navigation={navigation}/>
+                    <div className="py-10">
+                        <Routes>
+                            <Route path="/" element={<Dashboard/>}/>
+                            <Route path="/weather" element={<Weather/>}/>
+                            <Route path="/search" element={<Search/>}/>
+                            <Route path="/messages" element={<Messages/>}/>
+                        </Routes>
+                    </div>
+                </div>
+            </Router>
         </>
     )
 }

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspireDemo.Data;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> optisons) : DbContext(optisons)
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

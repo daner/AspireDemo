@@ -7,16 +7,19 @@ using OpenTelemetry.Trace;
 
 namespace AspireDemo.MigrationService;
 
-public class AppDbinitializer(
-    ILogger<AppDbinitializer> logger,
+public class AppDbInitializer(
+    ILogger<AppDbInitializer> logger,
     IServiceProvider serviceProvider,
     IHostApplicationLifetime hostApplicationLifetime) : BackgroundService
 {
     public const string ActivitySourceName = "Migrations";
     private static readonly ActivitySource ActivitySource = new(ActivitySourceName);
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
+        //Wait for db container to start
+        await Task.Delay(15000, cancellationToken);
+        
         using var activity = ActivitySource.StartActivity("Migrating database", ActivityKind.Client);
 
         try
@@ -24,14 +27,13 @@ public class AppDbinitializer(
             using var scope = serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-            await EnsureDatabaseAsync(dbContext, stoppingToken);
-            await RunMigrationAsync(dbContext, stoppingToken);
+            await EnsureDatabaseAsync(dbContext, cancellationToken);
+            await RunMigrationAsync(dbContext, cancellationToken);
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Error while migrating database.");
             activity?.RecordException(ex);
-            throw;
         }
 
         hostApplicationLifetime.StopApplication();

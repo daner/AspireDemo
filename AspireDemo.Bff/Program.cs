@@ -1,3 +1,4 @@
+using AspireDemo.ServiceDefaults;
 using OpenTelemetry.Metrics;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,7 +15,7 @@ app.UseStaticFiles();
 
 var group = app.MapGroup("/api");
 
-group.MapForwarder("{*path}", builder.Configuration["services:api:https:0"] ?? "");
+group.MapForwarder("{*path}", builder.Configuration["services:api:http:0"] ?? "");
 
 app.MapFallbackToFile("index.html");
 
