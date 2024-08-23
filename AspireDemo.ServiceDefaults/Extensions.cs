@@ -31,6 +31,9 @@ public static class Extensions
             http.AddServiceDiscovery();
         });
 
+
+        //builder.AddSeqEndpoint("seq");
+        
         return builder;
     }
 

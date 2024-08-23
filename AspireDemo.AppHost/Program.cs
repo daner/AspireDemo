@@ -11,7 +11,8 @@ var cache = builder.AddRedis("cache")
 
 var password = builder.AddParameter("sql-password", secret: true);
 var sql = builder.AddSqlServer("sqlserver", password, 60123)
-    .WithDataVolume("aspire-demo-sql-data");
+    .WithDataVolume("aspire-demo-sql-data")
+    .AddDatabase("aspiredemo");
 
 #endregion
 
