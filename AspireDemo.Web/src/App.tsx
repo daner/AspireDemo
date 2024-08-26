@@ -2,10 +2,10 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import Navbar from './components/Navbar.tsx'
 
 import {NavigationItem} from "./models/Navigation.ts";
-import Weather from "./components/Weather.tsx";
-import Dashboard from "./components/Dashboard.tsx";
-import Messages from "./components/Messages.tsx";
-import Search from "./components/Search.tsx";
+import Weather from "./pages/Weather.tsx";
+import Dashboard from "./pages/Dashboard.tsx";
+import Messages from "./pages/Messages.tsx";
+import Search from "./pages/Search.tsx";
 
 const navigation: NavigationItem[] = [
     {name: 'Dashboard', href: '/'},

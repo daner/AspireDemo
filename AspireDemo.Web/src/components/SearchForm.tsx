@@ -1,5 +1,6 @@
 ﻿import {useState} from 'react'
 import {ExclamationCircleIcon} from '@heroicons/react/20/solid'
+import Button from './Button.tsx'
 
 interface FormState {
     city: string;
@@ -97,10 +98,7 @@ const SearchForm = ({searchCallback} : IProps) => {
                         }
                     </div>
                     <div className="mt-2">
-                        <button
-                            className="rounded-md bg-indigo-600 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                            Search
-                        </button>
+                        <Button>Search</Button>
                     </div>
                 </div>
                 <div>
