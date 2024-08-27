@@ -1,11 +1,8 @@
-using System.Security.Claims;
 using AspireDemo.Bff;
 using AspireDemo.ServiceDefaults;
 using Keycloak.AuthServices.Authentication;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +27,6 @@ builder.Services.AddAuthentication(options =>
         options.ResponseType = "code";
         options.SaveTokens = true;
         options.Scope.Add("offline_access");
-        options.MapInboundClaims = true;
     });
 
 builder.Services.AddAuthorizationBuilder();

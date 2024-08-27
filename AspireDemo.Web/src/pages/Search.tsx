@@ -7,8 +7,12 @@ const Search = () => {
     const [weather, setWeather] = useState<any>(null)
 
     const searchHandler = async (code: string, city: string) => {
-        const response = await axios.get(`api/weatherforecast/${code}/${city}`)
-        setWeather(response.data);
+        try {
+            const response = await axios.get(`api/weatherforecast/${code}/${city}`)
+            setWeather(response.data);
+        } catch (ex: any) {
+            setWeather({message: ex.message})
+        }
     }
 
     return (

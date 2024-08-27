@@ -8,9 +8,8 @@ namespace AspireDemo.ServiceDefaults;
 
 public static class SerilogExtensions
 {
-        internal static IHostApplicationBuilder ConfigureSerilog(this IHostApplicationBuilder builder)
+    internal static IHostApplicationBuilder ConfigureSerilog(this IHostApplicationBuilder builder)
     {
-
         var seqUrl = builder.Configuration.GetConnectionString("seq");
         var otlpExporter = builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"];
         var serviceName = builder.Configuration["OTEL_SERVICE_NAME"] ?? "Unknown";
@@ -40,7 +39,6 @@ public static class SerilogExtensions
         builder.Services.AddSerilog();
         builder.Logging.ClearProviders().AddSerilog();
         return builder;
-
     }
 
     /// <summary>

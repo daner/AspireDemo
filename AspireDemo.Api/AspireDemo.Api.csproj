@@ -26,4 +26,8 @@
     <ProjectReference Include="..\AspireDemo.ServiceDefaults\AspireDemo.ServiceDefaults.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Notifications\" />
+  </ItemGroup>
+
 </Project>

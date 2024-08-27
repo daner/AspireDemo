@@ -61,7 +61,8 @@ public static class WeatherExtensions
                 return Results.Content(json, contentType: "application/json", statusCode: 200);
             })
             .WithName("SearchWeather")
-            .WithOpenApi();
+            .WithOpenApi()
+            .RequireAuthorization("User");
 
         return builder;
     }

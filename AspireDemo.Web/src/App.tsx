@@ -21,7 +21,7 @@ const App = () => {
             <Router>
                 <div className="min-h-full">
                     <Navbar navigation={navigation}/>
-                    <div className="py-10">
+                    <div className="py-5">
                         <Routes>
                             <Route path="/" element={<Dashboard/>}/>
                             <Route path="/weather" element={<Weather/>}/>
