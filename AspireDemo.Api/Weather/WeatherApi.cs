@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
-using System.Net;
 
 namespace AspireDemo.Api.Weather;
 
@@ -10,9 +9,9 @@ record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
     public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 }
 
-public static class WeatherExtensions
+public static class WeatherApi
 {
-    public static IEndpointRouteBuilder MapWeather(this IEndpointRouteBuilder builder)
+    public static IEndpointRouteBuilder MapWeatherApi(this IEndpointRouteBuilder builder)
     {
         var summaries = new[]
         {

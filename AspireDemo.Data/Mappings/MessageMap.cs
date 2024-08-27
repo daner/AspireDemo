@@ -14,12 +14,15 @@ public class MessageMap : IEntityTypeConfiguration<Message>
 
         builder.Property(m => m.Id)
             .IsRequired();
+
+        builder.Property(m => m.Timestamp)
+            .IsRequired();
         
-        builder.Property(m => m.Sender)
+        builder.Property(m => m.Username)
             .HasMaxLength(500)
             .IsRequired();
         
-        builder.Property(m => m.Receiever)
+        builder.Property(m => m.Room)
             .HasMaxLength(500)
             .IsRequired();
         

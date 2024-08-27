@@ -1,0 +1,56 @@
+﻿import {createSlice, PayloadAction} from '@reduxjs/toolkit'
+import {Message} from "../models/Message.ts";
+import {AppDispatch} from "../store.ts";
+import messageService from "../services/messageService.ts";
+
+const messageSlice = createSlice({
+    name: 'message',
+    initialState: {room: "", messages: []} as { room: string, messages: Message[] },
+    reducers: {
+        pushMessage(state, action: PayloadAction<Message>) {
+            //TODO: Check if id is already in list
+            return {...state, messages: [action.payload, ...state.messages]}
+        },
+        setMessages(state, action: PayloadAction<Message[]>) {
+            return {...state, messages: action.payload}
+        },
+        setRoom(state, action: PayloadAction<string>) {
+            return {...state, room: action.payload}
+        }
+    }
+})
+
+export const {pushMessage, setMessages, setRoom} = messageSlice.actions
+
+export const addMessage = (room: string, text: string) => {
+    return async (dispatch: AppDispatch) => {
+        const messageResult = await messageService.sendMessage(room, text)
+        if (messageResult.ok) {
+            dispatch(pushMessage(messageResult.value))
+        } else {
+            //Handle error
+        }
+    }
+}
+
+export const joinRoom = (room: string) => {
+    return async (dispatch: AppDispatch) => {
+        dispatch(setMessages([]));
+        const messageResult = await messageService.getAllForRoom(room);
+        if (messageResult.ok) {
+            dispatch(setRoom(room));
+            dispatch(setMessages(messageResult.value));
+        } else {
+            //Handle error
+        }
+    }
+}
+
+export const leaveRoom = () => {
+    return async (dispatch: AppDispatch) => {
+        dispatch(setRoom(""));
+        dispatch(setMessages([]));
+    }
+}
+
+export default messageSlice.reducer

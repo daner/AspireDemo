@@ -29,8 +29,8 @@ const Dashboard = () => {
             <main>
                 <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                     <div className="flex gap-4">
-                        <Button click={handleLogin}>Log in</Button>
-                        <Button click={handleLogout}>Log out</Button>
+                        <Button click={handleLogin}>Login</Button>
+                        <Button click={handleLogout}>Logout</Button>
                     </div>
                     <div className="mt-4">
                         <code className="block whitespace-pre overflow-x-scroll">

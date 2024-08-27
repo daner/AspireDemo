@@ -11,14 +11,14 @@ public static class AuthApi
     {
         var group = routes.MapGroup("/auth");
 
-        group.MapGet("me", async (HttpContext context) =>
+        group.MapGet("me", (HttpContext context) =>
         {
             if (context.User.Identity?.IsAuthenticated ?? false)
             {
                 var claims = context.User.Claims.Select(c => new { type = c.Type, value = c.Value }).ToArray();
-                var accessToken = await context.GetTokenAsync("access_token");
-                var refreshToken = await context.GetTokenAsync("refresh_token");
-                return Results.Json(new { isAuthenticated = true, claims, access_token = accessToken, refresh_token = refreshToken });
+                // var accessToken = await context.GetTokenAsync("access_token");
+                // var refreshToken = await context.GetTokenAsync("refresh_token");
+                return Results.Json(new { isAuthenticated = true, claims});
             }
 
             return Results.Json(new { isAuthenticated = false });

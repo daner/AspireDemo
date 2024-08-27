@@ -19,7 +19,6 @@ public static class BackendApi
             {
                 if (context.HttpContext.User.Identity?.IsAuthenticated ?? false)
                 {
-                    Console.WriteLine("Hello!");
                     var accessToken = await context.HttpContext.GetTokenAsync("access_token");
                     context.ProxyRequest.Headers.Authorization = new("Bearer", accessToken);    
                 }
