@@ -2,11 +2,15 @@
 import {useState} from 'react'
 import {Message} from "../models/Message.ts";
 import {useSelector} from 'react-redux'
-import {addMessage, joinRoom, leaveRoom} from "../reducers/messageReducer.ts";
+import {joinRoom, leaveRoom} from "../reducers/messageReducer.ts";
 import {RootState, useAppDispatch} from "../store.ts";
+import {useHubConnectionContext} from "../contexts/HubConnectionContext.tsx";
+import messageService from "../services/messageService.ts";
 
 const Messages = () => {
 
+    const hubContext = useHubConnectionContext();
+    
     const messages = useSelector<RootState, Message[]>((state) => {
         return state.chat.messages;
     })
@@ -23,18 +27,24 @@ const Messages = () => {
 
     const handleJoinRoom = () => {
         if (roomInput.length > 0) {
+            if(hubContext.connection != null) {
+                hubContext.connection.invoke("JoinRoom", roomInput)
+            }
             dispatch(joinRoom(roomInput))
         }
     }
 
     const handleLeaveRoom = () => {
+        if(hubContext.connection != null) {
+            hubContext.connection.invoke("LeaveRoom", room)
+        }
         dispatch(leaveRoom())
     }
 
-    const handleAddMessage = () => {
+    const handleAddMessage = async () => {
         if (messageInput.length > 0 && room.length > 0) {
+            await messageService.sendMessage(room, messageInput)
             setMessageInput("")
-            dispatch(addMessage(room, messageInput))
         }
     }
 

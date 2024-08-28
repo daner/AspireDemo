@@ -1,5 +1,6 @@
 using AspireDemo.Api;
 using AspireDemo.Api.Messages;
+using AspireDemo.Api.Notifications;
 using AspireDemo.Api.Weather;
 using AspireDemo.Data;
 using AspireDemo.ServiceDefaults;
@@ -27,6 +28,7 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.Configure<OpenWeatherMapOptions>(builder.Configuration.GetSection(nameof(OpenWeatherMapOptions)));
 
+builder.Services.AddSignalR().AddStackExchangeRedis(builder.Configuration.GetConnectionString("cache") ?? "");
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
@@ -52,6 +54,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHub<NotificationHub>("/api/notifications")
+    .RequireAuthorization();
 
 app.MapMessageApi();
 app.MapWeatherApi();

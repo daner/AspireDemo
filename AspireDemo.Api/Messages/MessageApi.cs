@@ -1,6 +1,8 @@
-﻿using AspireDemo.Data;
+﻿using AspireDemo.Api.Notifications;
+using AspireDemo.Data;
 using AspireDemo.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace AspireDemo.Api.Messages;
@@ -15,8 +17,7 @@ public static class MessageApi
                 async ([FromRoute] string room, [FromServices] ApplicationDbContext dbContext) =>
                 {
                     var messages = await dbContext.Messages.Where(m => m.Room == room)
-                        .OrderBy(m => m.Timestamp)
-                        //.Take(50)
+                        .OrderByDescending(m => m.Timestamp)
                         .ToListAsync();
                     return Results.Ok(messages.ToDto());
                 })
@@ -27,6 +28,7 @@ public static class MessageApi
                 [FromRoute] string room,
                 [FromBody] CreateMessage body,
                 [FromServices] IHttpContextAccessor context,
+                [FromServices] IHubContext<NotificationHub> hub,
                 [FromServices] ApplicationDbContext dbContext) =>
             {
                 var username = context.HttpContext?.User.Identity?.Name ?? "Anonymous";
@@ -41,9 +43,11 @@ public static class MessageApi
                 dbContext.Messages.Add(message);
                 await dbContext.SaveChangesAsync();
                 
-                //TODO: Trigger signalr notification
+                var dto = message.ToDto();
                 
-                return Results.Ok(message.ToDto());
+                await hub.Clients.Groups(room).SendAsync("ChatMessage", dto);
+                
+                return Results.Ok(dto);
             })
             .WithOpenApi()
             .RequireAuthorization("User");

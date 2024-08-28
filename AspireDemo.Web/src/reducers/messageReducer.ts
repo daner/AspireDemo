@@ -8,7 +8,6 @@ const messageSlice = createSlice({
     initialState: {room: "", messages: []} as { room: string, messages: Message[] },
     reducers: {
         pushMessage(state, action: PayloadAction<Message>) {
-            //TODO: Check if id is already in list
             return {...state, messages: [action.payload, ...state.messages]}
         },
         setMessages(state, action: PayloadAction<Message[]>) {
@@ -21,17 +20,6 @@ const messageSlice = createSlice({
 })
 
 export const {pushMessage, setMessages, setRoom} = messageSlice.actions
-
-export const addMessage = (room: string, text: string) => {
-    return async (dispatch: AppDispatch) => {
-        const messageResult = await messageService.sendMessage(room, text)
-        if (messageResult.ok) {
-            dispatch(pushMessage(messageResult.value))
-        } else {
-            //Handle error
-        }
-    }
-}
 
 export const joinRoom = (room: string) => {
     return async (dispatch: AppDispatch) => {
