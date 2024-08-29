@@ -1,73 +1,46 @@
 ﻿import {useState, createContext, useEffect, PropsWithChildren, useContext, useRef} from 'react'
-import {HubConnectionBuilder, HubConnection} from '@microsoft/signalr'
-import store, {useAppDispatch} from "../store.ts";
-import {pushMessage} from "../reducers/messageReducer.ts";
+import {HubConnection} from '@microsoft/signalr'
+import {useAppDispatch} from "../store.ts";
+import {leaveRoom, pushMessage} from "../reducers/messageReducer.ts";
 import {Message} from "../models/Message.ts";
+import connector from './signalr-connection.ts'
 
 export type HubConnectionContextValue = {
-    connection: HubConnection | null
+    connection?: HubConnection
 }
 
-const HubConnectionContext = createContext<HubConnectionContextValue>({connection: null})
+const HubConnectionContext = createContext<HubConnectionContextValue>({})
 
 export const useHubConnectionContext = () => useContext(HubConnectionContext)
 
 export const HubConnectionContextProvider = (props: PropsWithChildren<any>) => {
-
-    let room = "";
-    
-    store.subscribe(() => {
-        room = store.getState().chat.room;
-    });
     
     const dispatch = useAppDispatch();
-    
-    const [connection, setConnection] = useState<HubConnection | null>(null)
+    const [connectionRef, setConnectionRef] = useState<HubConnection>()
 
-    const initialized = useRef(false)
+    useEffect(() => {
+        setConnectionRef(connector().getConnection());
+    }, []);
     
     useEffect(() => {
-
-        if (initialized.current) {
-            return
-        } 
+       
+        if(connectionRef === undefined) return
         
-        initialized.current = true
-        
-        const connection = new HubConnectionBuilder()
-            .withUrl("/api/notifications")
-            .withAutomaticReconnect()
-            .build();
-
-        connection.start().then(() => {
-            setConnection(connection)
+        connectionRef.onclose(() => {
+            dispatch(leaveRoom())
         })
         
-        connection.onclose(() => {
-            console.log("Connection closed")
-            initialized.current = false
-            setConnection(null)
-        })
-        
-        connection.onreconnected(() => {
+        connectionRef.onreconnected(() => {
             console.log("Reconnected")
-            if(room.length > 0) {
-                connection.invoke("JoinRoom", room)
-            }
         })
         
-        connection.on("ChatMessage", (message: Message) => {
-            if(room === message.room) {
-                dispatch(pushMessage(message))    
-            }
-            else {
-                console.error("Got message for wrong room")
-            }
+        connectionRef?.on("ChatMessage", (message: Message) => {
+            dispatch(pushMessage(message))
         })
-    }, [])
+    }, [connectionRef])
 
     return (
-        <HubConnectionContext.Provider value={{connection}}>
+        <HubConnectionContext.Provider value={{ connection: connectionRef}}>
             {props.children}
         </HubConnectionContext.Provider>
     )

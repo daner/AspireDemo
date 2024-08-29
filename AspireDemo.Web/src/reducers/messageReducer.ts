@@ -8,7 +8,10 @@ const messageSlice = createSlice({
     initialState: {room: "", messages: []} as { room: string, messages: Message[] },
     reducers: {
         pushMessage(state, action: PayloadAction<Message>) {
-            return {...state, messages: [action.payload, ...state.messages]}
+            if(state.room === action.payload.room) {
+                return {...state, messages: [action.payload, ...state.messages]}    
+            }
+            return state;
         },
         setMessages(state, action: PayloadAction<Message[]>) {
             return {...state, messages: action.payload}

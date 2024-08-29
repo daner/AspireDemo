@@ -4,7 +4,9 @@ using AspireDemo.Api.Notifications;
 using AspireDemo.Api.Weather;
 using AspireDemo.Data;
 using AspireDemo.ServiceDefaults;
+using AspNetCore.SignalR.OpenTelemetry;
 using Keycloak.AuthServices.Authentication;
+using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Serilog;
 
@@ -18,6 +20,7 @@ builder.Services.AddOpenTelemetry()
     .WithTracing(tracing =>
     {
         tracing.AddSqlClientInstrumentation();
+        tracing.AddSignalRInstrumentation();
     });
 
 builder.Services.AddKeycloakWebApiAuthentication(builder.Configuration);
@@ -28,7 +31,10 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.Configure<OpenWeatherMapOptions>(builder.Configuration.GetSection(nameof(OpenWeatherMapOptions)));
 
-builder.Services.AddSignalR().AddStackExchangeRedis(builder.Configuration.GetConnectionString("cache") ?? "");
+builder.Services.AddSignalR()
+    .AddStackExchangeRedis(builder.Configuration.GetConnectionString("cache") ?? "")
+    .AddHubInstrumentation();
+
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
