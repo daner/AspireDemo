@@ -1,6 +1,7 @@
 using AspireDemo.Api;
 using AspireDemo.Api.Email;
 using AspireDemo.Api.Messages;
+using AspireDemo.Api.Messaging;
 using AspireDemo.Api.Notifications;
 using AspireDemo.Api.Weather;
 using AspireDemo.Data;
@@ -8,6 +9,7 @@ using AspireDemo.ServiceDefaults;
 using AspNetCore.SignalR.OpenTelemetry;
 using Keycloak.AuthServices.Authentication;
 using OpenTelemetry.Trace;
+using RabbitMQ.Client;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +23,7 @@ builder.Services.AddOpenTelemetry()
     {
         tracing.AddSqlClientInstrumentation();
         tracing.AddSignalRInstrumentation();
+        tracing.AddSource(nameof(EmailApi));
     });
 
 builder.Services.AddKeycloakWebApiAuthentication(builder.Configuration);
@@ -28,6 +31,12 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("User", policyBuilder => policyBuilder.RequireAuthenticatedUser() );
 } );
+
+
+builder.Services.AddTransient<IMessageSender<EmailMessage>>(sp =>
+{
+    return new MessageSender<EmailMessage>("email", sp.GetRequiredService<IConnection>(), sp.GetRequiredService<ILogger<MessageSender<EmailMessage>>>());
+});
 
 builder.Services.Configure<OpenWeatherMapOptions>(builder.Configuration.GetSection(nameof(OpenWeatherMapOptions)));
 

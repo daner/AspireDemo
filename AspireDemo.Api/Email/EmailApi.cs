@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RabbitMQ.Client;
+﻿using AspireDemo.Api.Messaging;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using System.Text;
-using System.Text.Json;
 
 namespace AspireDemo.Api.Email;
 
-public record EmailMessage(string From, string To, string Body);
+public record EmailMessage(string From, string To, string Subject, string Body);
 
 public static class EmailApi
 {
@@ -14,7 +12,7 @@ public static class EmailApi
     {
         var group = builder.MapGroup("/api/email");
 
-        group.MapPost("/", ([FromServices] IConnection rabbitConnection, [FromServices] IHttpContextAccessor context) =>
+        group.MapPost("/", ([FromServices] IMessageSender<EmailMessage> messageSender, [FromServices] IHttpContextAccessor context) =>
         {
 
             var to = context.HttpContext?.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value;
@@ -24,18 +22,14 @@ public static class EmailApi
                 return Results.BadRequest();
             }
 
-            var messsage = new EmailMessage("noreply@aspire.demo", to, "Hello World!");
-            var jsonString = JsonSerializer.Serialize(messsage);
-
-            var body = Encoding.UTF8.GetBytes(jsonString);
-
-            using var channel = rabbitConnection.CreateModel();
-            channel.QueueDeclare(queue: "email", durable: false, exclusive: false, autoDelete: false, arguments: null);
-            channel.BasicPublish(exchange: string.Empty, routingKey: "email", basicProperties: null, body: body);
+            var messsage = new EmailMessage("noreply@aspire.demo", to, "Test", "Hello World!");
+            
+            messageSender.SendMessage(messsage);
 
             return Results.Ok();
         });
 
         return group;
     }
+
 }

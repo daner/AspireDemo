@@ -1,3 +1,5 @@
+using AspireDemo.AppHost.MailDev;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
 #region Auth
@@ -42,6 +44,12 @@ builder.AddProject<Projects.AspireDemo_MigrationService>("migrationservice")
 
 #endregion
 
+#region Email
+var smtpServer = builder.ExecutionContext.IsRunMode
+    ? builder.AddMailDev("mailserver", httpPort: 1080)
+    : builder.AddConnectionString("mailserver");
+#endregion
+
 #region API
 var api = builder.AddProject<Projects.AspireDemo_Api>("api")
     .WithReference(seq)
@@ -65,9 +73,13 @@ builder.AddNpmApp("web", "../AspireDemo.Web", "dev")
 #endregion
 
 #region Worker
+var fromMail = builder.AddParameter("frommail");
+
 builder.AddProject<Projects.AspireDemo_EmailWorker>("aspiredemo-emailworker")
     .WithReference(seq)
-    .WithReference(rabbit);
+    .WithReference(rabbit)
+    .WithReference(smtpServer)
+    .WithEnvironment("Email__From", fromMail);
 #endregion
 
 

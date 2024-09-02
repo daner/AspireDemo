@@ -6,7 +6,23 @@ var builder = Host.CreateApplicationBuilder(args);
 Log.Logger.ConfigureSerilogBootstrapLogger();
 
 builder.AddServiceDefaults();
-builder.AddRabbitMQClient("rabbit");
+
+builder.AddSmtpClient("mailserver");
+
+builder.Services.AddOptions<EmailOptions>()
+    .BindConfiguration("Email")
+    .ValidateDataAnnotations();
+
+builder.Services.AddOpenTelemetry().WithTracing(tracing =>
+{
+    tracing.AddSource(nameof(EmailWorker));
+});
+
+builder.AddRabbitMQClient("rabbit", configureConnectionFactory: config =>
+{
+    config.DispatchConsumersAsync = true;
+});
+
 builder.Services.AddHostedService<EmailWorker>();
 
 var host = builder.Build();
@@ -14,7 +30,7 @@ var host = builder.Build();
 if(builder.Environment.IsDevelopment())
 {
     //Wait for containers to start
-    await Task.Delay(20000);
+    await Task.Delay(15000);
 }
 
 host.Run();
