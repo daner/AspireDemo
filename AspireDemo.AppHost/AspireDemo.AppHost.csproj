@@ -13,6 +13,7 @@
 		<PackageReference Include="Aspire.Hosting.AppHost" Version="8.1.0" />
 		<PackageReference Include="Aspire.Hosting.Keycloak" Version="8.1.0-preview.1.24373.2" />
 		<PackageReference Include="Aspire.Hosting.NodeJs" Version="8.1.0" />
+		<PackageReference Include="Aspire.Hosting.RabbitMQ" Version="8.2.0" />
 		<PackageReference Include="Aspire.Hosting.Redis" Version="8.1.0" />
 		<PackageReference Include="Aspire.Hosting.Seq" Version="8.1.0" />
 		<PackageReference Include="Aspire.Hosting.SqlServer" Version="8.1.0" />
@@ -21,6 +22,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\AspireDemo.Api\AspireDemo.Api.csproj" />
 		<ProjectReference Include="..\AspireDemo.Bff\AspireDemo.Bff.csproj" />
+		<ProjectReference Include="..\AspireDemo.EmailWorker\AspireDemo.EmailWorker.csproj" />
 		<ProjectReference Include="..\AspireDemo.MigrationService\AspireDemo.MigrationService.csproj" />
 	</ItemGroup>
 

@@ -1,4 +1,5 @@
 using AspireDemo.Api;
+using AspireDemo.Api.Email;
 using AspireDemo.Api.Messages;
 using AspireDemo.Api.Notifications;
 using AspireDemo.Api.Weather;
@@ -6,7 +7,6 @@ using AspireDemo.Data;
 using AspireDemo.ServiceDefaults;
 using AspNetCore.SignalR.OpenTelemetry;
 using Keycloak.AuthServices.Authentication;
-using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Serilog;
 
@@ -34,6 +34,8 @@ builder.Services.Configure<OpenWeatherMapOptions>(builder.Configuration.GetSecti
 builder.Services.AddSignalR()
     .AddStackExchangeRedis(builder.Configuration.GetConnectionString("cache") ?? "")
     .AddHubInstrumentation();
+
+builder.AddRabbitMQClient("rabbit");
 
 builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
@@ -66,6 +68,7 @@ app.MapHub<NotificationHub>("/api/notifications")
 
 app.MapMessageApi();
 app.MapWeatherApi();
+app.MapEmailApi();
 
 app.Run();
 

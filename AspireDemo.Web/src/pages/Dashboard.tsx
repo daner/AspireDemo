@@ -1,8 +1,16 @@
-﻿import {useEffect, useState} from 'react'
-import axios from 'axios'
-import Button from "../components/Button.tsx";
+﻿import {useEffect} from 'react'
+import {useSelector} from 'react-redux'
+import Button from "../components/Button";
+import {checkAuthorizedStatus} from "../reducers/userReducer";
+import {RootState, useAppDispatch} from "../store";
+import {AuthorizedStatus} from "../models/AuthorizedStatus";
+import axios from 'axios';
 
 const Dashboard = () => {
+
+    const dispatch = useAppDispatch();
+    const authState = useSelector<RootState, AuthorizedStatus>(state => state.user);
+
     const handleLogin = () => {
         const currentUrl = window.location.href;
         window.location.href = `/auth/login?redirectUrl=${currentUrl}`
@@ -13,12 +21,14 @@ const Dashboard = () => {
         window.location.href = `/auth/logout?redirectUrl=${currentUrl}`
     }
 
-    const [authState, setAuthState] = useState<string>("");
-    
+    const triggerEmail = async () => {
+        await axios.post("/api/email", {});
+    }
+
     useEffect(() => {
-        axios.get("/auth/me")
-            .then(result => setAuthState(JSON.stringify(result.data, null, 2)))
+      dispatch(checkAuthorizedStatus())
     }, [])
+    
     return (
         <>
             <header>
@@ -29,12 +39,20 @@ const Dashboard = () => {
             <main>
                 <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                     <div className="flex gap-4">
-                        <Button click={handleLogin}>Login</Button>
-                        <Button click={handleLogout}>Logout</Button>
+                        {
+                            authState.isAuthenticated ? (
+                                <>
+                                    <Button click={handleLogout}>Logout</Button>        
+                                    <Button click={triggerEmail}>Send Email</Button>        
+                                </>
+                            ) : (
+                                <Button click={handleLogin}>Login</Button>        
+                            )
+                        }
                     </div>
                     <div className="mt-4">
                         <code className="block whitespace-pre overflow-x-scroll">
-                            {authState}
+                            {JSON.stringify(authState, null, 2)}
                         </code>
                     </div>
                 </div>

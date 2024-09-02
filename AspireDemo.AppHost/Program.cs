@@ -7,6 +7,14 @@ var keycloak = builder.AddKeycloak("keycloak", 8080, adminUsername: keycloakAdmi
     .WithDataVolume("keycloak-data");
 #endregion
 
+#region Messaging
+var rabbitAdmin = builder.AddParameter("rabbit-admin");
+var rabbitPassword = builder.AddParameter("rabbit-password", secret: true);
+var rabbit = builder.AddRabbitMQ("rabbit", rabbitAdmin, rabbitPassword)
+    .WithDataVolume()
+    .WithManagementPlugin();
+#endregion
+
 #region Redis
 
 var cache = builder.AddRedis("cache")
@@ -17,7 +25,7 @@ var cache = builder.AddRedis("cache")
 #region SEQ
 
 var seq = builder.AddSeq("seq", 5341)
-    .WithDataVolume("aspire-demo-seq-data");
+    .WithDataVolume();
 
 #endregion
 
@@ -38,7 +46,8 @@ builder.AddProject<Projects.AspireDemo_MigrationService>("migrationservice")
 var api = builder.AddProject<Projects.AspireDemo_Api>("api")
     .WithReference(seq)
     .WithReference(cache)
-    .WithReference(sql);
+    .WithReference(sql)
+    .WithReference(rabbit);
 #endregion
 
 #region Frontend and BFF
@@ -50,10 +59,17 @@ var bff = builder.AddProject<Projects.AspireDemo_Bff>("bff")
 //For production builds this project is handled by the Dockerfile in the BFF project
 builder.AddNpmApp("web", "../AspireDemo.Web", "dev")
     .WithReference(bff)
-    .WithReference(api)
     .WithHttpEndpoint(5173, env: "PORT", isProxied: false)
     .ExcludeFromManifest();
 
 #endregion
+
+#region Worker
+builder.AddProject<Projects.AspireDemo_EmailWorker>("aspiredemo-emailworker")
+    .WithReference(seq)
+    .WithReference(rabbit);
+#endregion
+
+
 
 builder.Build().Run();

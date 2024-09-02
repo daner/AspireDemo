@@ -45,7 +45,7 @@ public static class MessageApi
                 
                 var dto = message.ToDto();
                 
-                await hub.Clients.Groups(room).SendAsync("ChatMessage", dto);
+                await hub.Clients.Groups(room).SendAsync(NotificationHub.ChatMessage, dto);
                 
                 return Results.Ok(dto);
             })

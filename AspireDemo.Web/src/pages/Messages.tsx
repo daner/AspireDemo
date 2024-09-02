@@ -6,6 +6,7 @@ import {joinRoom, leaveRoom} from "../reducers/messageReducer.ts";
 import {RootState, useAppDispatch} from "../store.ts";
 import {useHubConnectionContext} from "../contexts/HubConnectionContext.tsx";
 import messageService from "../services/messageService.ts";
+import {AuthorizedStatus} from "../models/AuthorizedStatus.ts";
 
 const Messages = () => {
 
@@ -19,6 +20,8 @@ const Messages = () => {
         return state.chat.room;
     })
 
+    const authState = useSelector<RootState, AuthorizedStatus>(state => state.user);
+    
     const dispatch = useAppDispatch()
 
     const [roomInput, setRoomInput] = useState<string>("")
@@ -59,6 +62,7 @@ const Messages = () => {
                 <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
                     <div className="flex flex-col h-[calc(100vh-13rem)] justify-between gap-4">
                         {
+                            authState.isAuthenticated && (
                             room.length === 0 ? (
                                 <div className="flex row gap-4">
                                     <input id="room" className={inputClasses} value={roomInput}
@@ -75,7 +79,7 @@ const Messages = () => {
                                         <Button click={handleLeaveRoom}>Leave room</Button>
                                     </div>
                                 </>
-                            )
+                            ))
                         }
                         <div className="flex-grow overflow-y-auto bg-gray-50">
                             <pre className="px-2 py-1 text-pretty">
