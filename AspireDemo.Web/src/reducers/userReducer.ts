@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import userService from '../services/userService.ts'
-import {AppDispatch} from "../store.ts";
-import {AuthorizedStatus} from "../models/AuthorizedStatus.ts";
+import userService from '../services/userService'
+import {AppDispatch} from "../store";
+import {AuthorizedStatus} from "../models/AuthorizedStatus";
 
 const userSlice = createSlice({
     name: 'user',
-    initialState: { authorized: false, claims: [] } as AuthorizedStatus,
+    initialState: { isAuthenticated: false, claims: [] } as AuthorizedStatus,
     reducers: {
         setAuthorized: (_, action: PayloadAction<AuthorizedStatus>) => {
             return action.payload;  

@@ -1,7 +1,7 @@
-﻿import {Disclosure, DisclosureButton, DisclosurePanel} from '@headlessui/react'
-import {Bars3Icon, XMarkIcon} from '@heroicons/react/24/outline'
-import {NavigationItem} from "../models/Navigation.ts";
-import {NavLink} from 'react-router-dom'
+﻿import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { NavigationItem } from "../models/Navigation";
+import { NavLink } from 'react-router-dom'
 
 interface IProps {
     navigation: NavigationItem[]
@@ -11,7 +11,7 @@ const classNames = (...classes: string[]) => {
     return classes.filter(Boolean).join(' ')
 }
 
-const Navbar = ({navigation}: IProps) => {
+const Navbar = ({ navigation }: IProps) => {
     return (
         <>
             <Disclosure as="nav" className="bg-white shadow-sm">
@@ -35,7 +35,7 @@ const Navbar = ({navigation}: IProps) => {
                                     <NavLink
                                         key={item.name}
                                         to={item.href}
-                                        className={({isActive}) => classNames(
+                                        className={({ isActive }) => classNames(
                                             isActive
                                                 ? 'border-indigo-500 text-gray-900'
                                                 : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700',
@@ -51,10 +51,10 @@ const Navbar = ({navigation}: IProps) => {
                             {/* Mobile menu button */}
                             <DisclosureButton
                                 className="group relative inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                <span className="absolute -inset-0.5"/>
+                                <span className="absolute -inset-0.5" />
                                 <span className="sr-only">Open main menu</span>
-                                <Bars3Icon aria-hidden="true" className="block h-6 w-6 group-data-[open]:hidden"/>
-                                <XMarkIcon aria-hidden="true" className="hidden h-6 w-6 group-data-[open]:block"/>
+                                <Bars3Icon aria-hidden="true" className="block h-6 w-6 group-data-[open]:hidden" />
+                                <XMarkIcon aria-hidden="true" className="hidden h-6 w-6 group-data-[open]:block" />
                             </DisclosureButton>
                         </div>
                     </div>
@@ -64,13 +64,13 @@ const Navbar = ({navigation}: IProps) => {
                     <div className="space-y-1 pb-3 pt-2">
                         {navigation.map((item) => (
                             <NavLink key={item.name}
-                                     to={item.href}
-                                     className={({isActive}) => classNames(
-                                         isActive
-                                             ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
-                                             : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800',
-                                         'block border-l-4 py-2 pl-3 pr-4 text-base font-medium',
-                                     )}>
+                                to={item.href}
+                                className={({ isActive }) => classNames(
+                                    isActive
+                                        ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
+                                        : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800',
+                                    'block border-l-4 py-2 pl-3 pr-4 text-base font-medium',
+                                )}>
                                 <DisclosureButton>
                                     {item.name}
                                 </DisclosureButton>

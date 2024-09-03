@@ -1,7 +1,7 @@
 ﻿import {createSlice, PayloadAction} from '@reduxjs/toolkit'
-import {Message} from "../models/Message.ts";
-import {AppDispatch} from "../store.ts";
-import messageService from "../services/messageService.ts";
+import {Message} from "../models/Message";
+import {AppDispatch} from "../store";
+import messageService from "../services/messageService";
 
 const messageSlice = createSlice({
     name: 'message',

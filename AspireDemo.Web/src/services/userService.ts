@@ -1,5 +1,5 @@
 ﻿import axios from 'axios'
-import {AuthorizedStatus} from "../models/AuthorizedStatus.ts";
+import {AuthorizedStatus} from "../models/AuthorizedStatus";
 
 const baseUrl = "/auth"
 
@@ -8,7 +8,7 @@ const getAuthorizedStatus = async (): Promise<AuthorizedStatus> => {
         const response = await axios.get<AuthorizedStatus>(baseUrl + "/me")
         return response.data
     } catch (e) {
-        return {authorized: false, claims: []}
+        return { isAuthenticated: false, claims: []}
     }
 }
 

@@ -1,6 +1,6 @@
 ﻿import axios from 'axios'
-import {Message} from "../models/Message.ts";
-import {Result} from "../models/Result.ts";
+import {Message} from "../models/Message";
+import {Result} from "../models/Result";
 
 const baseUrl = "/api/message"
 

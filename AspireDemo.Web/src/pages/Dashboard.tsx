@@ -1,14 +1,11 @@
 ﻿import {useEffect} from 'react'
 import {useSelector} from 'react-redux'
 import Button from "../components/Button";
-import {checkAuthorizedStatus} from "../reducers/userReducer";
-import {RootState, useAppDispatch} from "../store";
 import {AuthorizedStatus} from "../models/AuthorizedStatus";
 import axios from 'axios';
 
 const Dashboard = () => {
 
-    const dispatch = useAppDispatch();
     const authState = useSelector<RootState, AuthorizedStatus>(state => state.user);
 
     const handleLogin = () => {
@@ -24,11 +21,7 @@ const Dashboard = () => {
     const triggerEmail = async () => {
         await axios.post("/api/email", {});
     }
-
-    useEffect(() => {
-      dispatch(checkAuthorizedStatus())
-    }, [])
-    
+   
     return (
         <>
             <header>

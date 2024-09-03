@@ -1,6 +1,6 @@
 ﻿import {useState, useEffect} from 'react'
 import axios from 'axios'
-import {WeatherForecast} from "../models/Weather.ts";
+import {WeatherForecast} from "../models/Weather";
 
 const Weather = () => {
 

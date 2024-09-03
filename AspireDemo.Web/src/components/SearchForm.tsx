@@ -1,6 +1,6 @@
-﻿import {useState} from 'react'
-import {ExclamationCircleIcon} from '@heroicons/react/20/solid'
-import Button from './Button.tsx'
+﻿import { useState } from 'react'
+import { ExclamationCircleIcon } from '@heroicons/react/20/solid'
+import Button from './Button'
 
 interface FormState {
     city: string;
@@ -13,9 +13,9 @@ interface IProps {
     searchCallback: (code: string, city: string) => Promise<void>
 }
 
-const SearchForm = ({searchCallback} : IProps) => {
+const SearchForm = ({ searchCallback }: IProps) => {
 
-    const [formData, setFormData] = useState<FormState>({city: "", country: "", cityError: false, countryError: false})
+    const [formData, setFormData] = useState<FormState>({ city: "", country: "", cityError: false, countryError: false })
 
     const classNames = (...classes: string[]) => {
         return classes.filter(Boolean).join(' ')
@@ -26,35 +26,34 @@ const SearchForm = ({searchCallback} : IProps) => {
         let cityError = false;
         let countryError = false;
 
-        if(formData.city.length === 0) {
+        if (formData.city.length === 0) {
             cityError = true;
         }
 
-        if(formData.country.length === 0) {
+        if (formData.country.length === 0) {
             countryError = true;
         }
 
-        setFormData({...formData, cityError: cityError, countryError: countryError})
+        setFormData({ ...formData, cityError: cityError, countryError: countryError })
 
-        if(!cityError && !countryError)
-        {
+        if (!cityError && !countryError) {
             await searchCallback(formData.country, formData.city);
         }
     }
-    
+
     const handleCityChanged = (event: any) => {
-        setFormData({...formData, city: event.target.value})
+        setFormData({ ...formData, city: event.target.value })
     }
 
     const handleCountryChanged = (event: any) => {
-        setFormData({...formData, country: event.target.value})
+        setFormData({ ...formData, country: event.target.value })
     }
 
     const commonClasses = "block rounded-md border-0 py-1.5 sm:text-sm sm:leading-6 focus:ring-2 focus:ring-inset ring-1 ring-inset"
     const errorClasses = "pr-10 text-red-900 ring-red-300 placeholder:text-red-300  focus:ring-red-500 "
     const normalClasses = "shadow-sm text-gray-900 ring-gray-300 placeholder:text-gray-400 focus:ring-indigo-600"
-    
-    return(
+
+    return (
         <>
             <form onSubmit={handleSubmit}>
                 <span>Search for city to show weather</span>
@@ -73,7 +72,7 @@ const SearchForm = ({searchCallback} : IProps) => {
                             formData.countryError && (
                                 <div
                                     className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                    <ExclamationCircleIcon aria-hidden="true" className="h-5 w-5 text-red-500"/>
+                                    <ExclamationCircleIcon aria-hidden="true" className="h-5 w-5 text-red-500" />
                                 </div>
                             )
                         }
@@ -92,7 +91,7 @@ const SearchForm = ({searchCallback} : IProps) => {
                             formData.cityError && (
                                 <div
                                     className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                                    <ExclamationCircleIcon aria-hidden="true" className="h-5 w-5 text-red-500"/>
+                                    <ExclamationCircleIcon aria-hidden="true" className="h-5 w-5 text-red-500" />
                                 </div>
                             )
                         }

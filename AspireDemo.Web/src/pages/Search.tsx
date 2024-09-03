@@ -1,5 +1,5 @@
 ﻿import {useState} from 'react'
-import SearchForm from "../components/SearchForm.tsx";
+import SearchForm from "../components/SearchForm";
 import axios from 'axios'
 
 const Search = () => {

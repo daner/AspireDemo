@@ -1,12 +1,12 @@
-﻿import Button from "../components/Button.tsx";
+﻿import Button from "../components/Button";
 import {useState} from 'react'
-import {Message} from "../models/Message.ts";
+import {Message} from "../models/Message";
 import {useSelector} from 'react-redux'
-import {joinRoom, leaveRoom} from "../reducers/messageReducer.ts";
-import {RootState, useAppDispatch} from "../store.ts";
-import {useHubConnectionContext} from "../contexts/HubConnectionContext.tsx";
-import messageService from "../services/messageService.ts";
-import {AuthorizedStatus} from "../models/AuthorizedStatus.ts";
+import {joinRoom, leaveRoom} from "../reducers/messageReducer";
+import {RootState, useAppDispatch} from "../store";
+import {useHubConnectionContext} from "../contexts/HubConnectionContext";
+import messageService from "../services/messageService";
+import {AuthorizedStatus} from "../models/AuthorizedStatus";
 
 const Messages = () => {
 

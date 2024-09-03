@@ -1,9 +1,9 @@
 ﻿import {useState, createContext, useEffect, PropsWithChildren, useContext} from 'react'
 import {HubConnection} from '@microsoft/signalr'
-import {useAppDispatch} from "../store.ts";
-import {leaveRoom, pushMessage} from "../reducers/messageReducer.ts";
-import {Message} from "../models/Message.ts";
-import connector from './signalr-connection.ts'
+import {useAppDispatch} from '../store';
+import {leaveRoom, pushMessage} from '../reducers/messageReducer';
+import {Message} from '../models/Message'
+import connector from './signalr-connection'
 
 export type HubConnectionContextValue = {
     connection?: HubConnection

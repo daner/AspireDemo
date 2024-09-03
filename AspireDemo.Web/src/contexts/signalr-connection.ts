@@ -1,4 +1,4 @@
-import * as signalR from "@microsoft/signalr";
+import * as signalR from '@microsoft/signalr';
 
 class Connector {
     private readonly connection: signalR.HubConnection;
