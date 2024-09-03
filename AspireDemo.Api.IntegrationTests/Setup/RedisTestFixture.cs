@@ -5,7 +5,7 @@ namespace AspireDemo.Api.IntegrationTests.Setup;
 public class RedisTestFixture : IAsyncLifetime
 {
     protected ApiWebApplicationFactory _factory = default!;
-    private RedisContainer _redisContainer = new RedisBuilder().Build();
+    private readonly RedisContainer _redisContainer = new RedisBuilder().Build();
 
     public async Task InitializeAsync()
     {

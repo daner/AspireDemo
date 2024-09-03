@@ -6,7 +6,7 @@ namespace AspireDemo.Api.IntegrationTests.Setup;
 public class DatabaseTestFixture : IAsyncLifetime
 {
     protected ApiWebApplicationFactory _factory = default!;
-    private MsSqlContainer _databaseContainer = new MsSqlBuilder().Build();
+    private readonly MsSqlContainer _databaseContainer = new MsSqlBuilder().Build();
 
     public async Task InitializeAsync()
     {
