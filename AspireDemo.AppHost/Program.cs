@@ -2,11 +2,19 @@ using AspireDemo.AppHost.MailDev;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
+#region Email
+var smtpServer = builder.ExecutionContext.IsRunMode
+    ? builder.AddMailDev("mailserver", httpPort: 1080, smtpPort: 57515)
+    : builder.AddConnectionString("mailserver");
+#endregion
+
 #region Auth
 var keycloakAdmin = builder.AddParameter("keycloak-admin");
 var keycloakPassword = builder.AddParameter("keycloak-password", secret: true);
-var keycloak = builder.AddKeycloak("keycloak", 8080, adminUsername: keycloakAdmin, adminPassword: keycloakPassword)
-    .WithDataVolume("keycloak-data");
+var keycloak = builder
+    .AddKeycloak("keycloak", 8080, adminUsername: keycloakAdmin, adminPassword: keycloakPassword)
+    .WithDataVolume("keycloak-data")
+    .WithReference(smtpServer);
 #endregion
 
 #region Messaging
@@ -42,12 +50,6 @@ builder.AddProject<Projects.AspireDemo_MigrationService>("migrationservice")
     .WithReference(sql)
     .WithReference(seq);
 
-#endregion
-
-#region Email
-var smtpServer = builder.ExecutionContext.IsRunMode
-    ? builder.AddMailDev("mailserver", httpPort: 1080)
-    : builder.AddConnectionString("mailserver");
 #endregion
 
 #region API

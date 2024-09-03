@@ -55,7 +55,7 @@ class DependencyInjectionObjectPoolPolicy<T>(IServiceProvider sp) : IPooledObjec
 
 public interface ISmtpClient
 {
-    Task SendMailAsync(MailMessage message);
+    Task SendMailAsync(MailMessage message, CancellationToken ct);
 }
 
 class SmtpClientWithTelemetry(ObjectPool<SmtpClient> pool) : ISmtpClient
@@ -63,7 +63,7 @@ class SmtpClientWithTelemetry(ObjectPool<SmtpClient> pool) : ISmtpClient
     public const string ActivitySourceName = "Smtp";
     private ActivitySource ActivitySource { get; } = new(ActivitySourceName);
 
-    public async Task SendMailAsync(MailMessage message)
+    public async Task SendMailAsync(MailMessage message, CancellationToken ct)
     {
         var activity = ActivitySource.StartActivity("SendMail", ActivityKind.Client);
 
@@ -79,7 +79,7 @@ class SmtpClientWithTelemetry(ObjectPool<SmtpClient> pool) : ISmtpClient
 
         try
         {
-            await client.SendMailAsync(message);
+            await client.SendMailAsync(message, ct);
         }
         catch (Exception ex)
         {

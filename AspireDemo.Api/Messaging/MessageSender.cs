@@ -17,7 +17,9 @@ public class MessageSender<T>(
     IConnection connection,
     ILogger<MessageSender<T>> logger) : IMessageSender<T>
 {
-    private static readonly ActivitySource ActivitySource = new(nameof(MessageSender<T>));
+    public const string ActivitySourceName = nameof(MessageSender<T>);
+
+    private static readonly ActivitySource ActivitySource = new(ActivitySourceName);
     private static readonly TextMapPropagator Propagator = Propagators.DefaultTextMapPropagator;
 
     public Task SendMessage(T message)

@@ -23,7 +23,7 @@ builder.Services.AddOpenTelemetry()
     {
         tracing.AddSqlClientInstrumentation();
         tracing.AddSignalRInstrumentation();
-        tracing.AddSource(nameof(EmailApi));
+        tracing.AddSource(MessageSender<EmailMessage>.ActivitySourceName);
     });
 
 builder.Services.AddKeycloakWebApiAuthentication(builder.Configuration);
