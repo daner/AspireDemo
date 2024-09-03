@@ -3,38 +3,47 @@ using AspireDemo.AppHost.MailDev;
 var builder = DistributedApplication.CreateBuilder(args);
 
 #region Email
+
 var smtpServer = builder.ExecutionContext.IsRunMode
     ? builder.AddMailDev("mailserver", httpPort: 1080, smtpPort: 57515)
     : builder.AddConnectionString("mailserver");
+
 #endregion
 
 #region Auth
+
 var keycloakAdmin = builder.AddParameter("keycloak-admin");
 var keycloakPassword = builder.AddParameter("keycloak-password", secret: true);
 var keycloak = builder
     .AddKeycloak("keycloak", 8080, adminUsername: keycloakAdmin, adminPassword: keycloakPassword)
     .WithDataVolume("keycloak-data")
     .WithReference(smtpServer);
+
 #endregion
 
 #region Messaging
+
 var rabbitAdmin = builder.AddParameter("rabbit-admin");
 var rabbitPassword = builder.AddParameter("rabbit-password", secret: true);
-var rabbit = builder.AddRabbitMQ("rabbit", rabbitAdmin, rabbitPassword)
+var rabbit = builder
+    .AddRabbitMQ("rabbit", rabbitAdmin, rabbitPassword)
     .WithDataVolume()
     .WithManagementPlugin();
+
 #endregion
 
 #region Redis
 
-var cache = builder.AddRedis("cache")
+var cache = builder
+    .AddRedis("cache")
     .WithRedisCommander();
 
 #endregion
 
 #region SEQ
 
-var seq = builder.AddSeq("seq", 5341)
+var seq = builder
+    .AddSeq("seq", 5341)
     .WithDataVolume();
 
 #endregion
@@ -42,7 +51,8 @@ var seq = builder.AddSeq("seq", 5341)
 #region SQL
 
 var password = builder.AddParameter("sql-password", secret: true);
-var sql = builder.AddSqlServer("sqlserver", password, 60123)
+var sql = builder
+    .AddSqlServer("sqlserver", password, 60123)
     .WithDataVolume("aspire-demo-sql-data")
     .AddDatabase("aspiredemo");
 
@@ -53,11 +63,13 @@ builder.AddProject<Projects.AspireDemo_MigrationService>("migrationservice")
 #endregion
 
 #region API
+
 var api = builder.AddProject<Projects.AspireDemo_Api>("api")
     .WithReference(seq)
     .WithReference(cache)
     .WithReference(sql)
     .WithReference(rabbit);
+
 #endregion
 
 #region Frontend and BFF
@@ -75,6 +87,7 @@ builder.AddNpmApp("web", "../AspireDemo.Web", "dev")
 #endregion
 
 #region Worker
+
 var fromMail = builder.AddParameter("frommail");
 
 builder.AddProject<Projects.AspireDemo_EmailWorker>("aspiredemo-emailworker")
@@ -82,8 +95,8 @@ builder.AddProject<Projects.AspireDemo_EmailWorker>("aspiredemo-emailworker")
     .WithReference(rabbit)
     .WithReference(smtpServer)
     .WithEnvironment("Email__From", fromMail);
-#endregion
 
+#endregion
 
 
 builder.Build().Run();

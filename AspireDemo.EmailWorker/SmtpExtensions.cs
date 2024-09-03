@@ -49,7 +49,6 @@ internal static class SmtpExtensions
 class DependencyInjectionObjectPoolPolicy<T>(IServiceProvider sp) : IPooledObjectPolicy<T> where T : class, new()
 {
     public T Create() => sp.GetRequiredService<T>();
-
     public bool Return(T obj) => true;
 }
 

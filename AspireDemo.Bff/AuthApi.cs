@@ -16,12 +16,10 @@ public static class AuthApi
             if (context.User.Identity?.IsAuthenticated ?? false)
             {
                 var claims = context.User.Claims.Select(c => new { type = c.Type, value = c.Value }).ToArray();
-                // var accessToken = await context.GetTokenAsync("access_token");
-                // var refreshToken = await context.GetTokenAsync("refresh_token");
                 return Results.Json(new { isAuthenticated = true, claims});
             }
 
-            return Results.Json(new { isAuthenticated = false });
+            return Results.Json(new { isAuthenticated = false, claims = new List<KeyValuePair<string, string>>() });
         });
 
         group.MapGet("login", ([FromQuery]string? redirectUrl) => Results.Challenge(new AuthenticationProperties

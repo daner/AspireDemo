@@ -8,32 +8,24 @@ namespace AspireDemo.EmailWorker;
 
 public record EmailMessage(string From, string To, string Subject, string Body);
 
-public class EmailWorker : AbstractRabbitWorker<EmailMessage>
+public class EmailWorker(
+    ILogger<EmailWorker> logger,
+    IConnection connection,
+    ISmtpClient smtpClient,
+    IOptions<EmailOptions> emailOptions,
+    [FromKeyedServices(AbstractRabbitWorker<EmailMessage>.RetryPolicy)] ResiliencePipeline resiliencePipeline) 
+    : AbstractRabbitWorker<EmailMessage>(QueueName, connection, resiliencePipeline, logger)
 {
     private const string QueueName = "email";
 
-    private readonly ISmtpClient _smtpClient;
-    private readonly IOptions<EmailOptions> _emailOptions;
-
-    public EmailWorker(
-        ILogger<EmailWorker> logger,
-        IConnection connection,
-        ISmtpClient smtpClient,
-        IOptions<EmailOptions> emailOptions,
-        [FromKeyedServices(RetryPolicy)] ResiliencePipeline resiliencePipeline) : base(QueueName, connection, resiliencePipeline, logger)
-    {
-        _smtpClient = smtpClient;
-        _emailOptions = emailOptions;
-    }
-
     protected override async Task HandleMessage(EmailMessage message, CancellationToken stoppingToken)
     {
-        var mailMessage = new MailMessage(_emailOptions.Value.From, message.To, message.Subject, message.Body)
+        var mailMessage = new MailMessage(emailOptions.Value.From, message.To, message.Subject, message.Body)
         {
             IsBodyHtml = true
         };
 
-        await _smtpClient.SendMailAsync(mailMessage, stoppingToken);
+        await smtpClient.SendMailAsync(mailMessage, stoppingToken);
     }
 
     protected override Task OnConsumerConsumerCancelled(object? sender, ConsumerEventArgs e)
