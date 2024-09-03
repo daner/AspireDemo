@@ -1,5 +1,4 @@
 ﻿using Testcontainers.MsSql;
-using Testcontainers.Redis;
 
 namespace AspireDemo.Api.IntegrationTests.Setup;
 

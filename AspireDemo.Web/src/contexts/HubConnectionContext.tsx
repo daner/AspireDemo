@@ -1,8 +1,8 @@
-﻿import {useState, createContext, useEffect, PropsWithChildren, useContext} from 'react'
-import {HubConnection} from '@microsoft/signalr'
-import {useAppDispatch} from '../store';
-import {leaveRoom, pushMessage} from '../reducers/messageReducer';
-import {Message} from '../models/Message'
+﻿import { useState, createContext, useEffect, PropsWithChildren, useContext } from 'react'
+import { HubConnection } from '@microsoft/signalr'
+import { useAppDispatch } from '../store';
+import { leaveRoom, pushMessage } from '../reducers/messageReducer';
+import { Message } from '../models/Message'
 import connector from './signalr-connection'
 
 export type HubConnectionContextValue = {
@@ -40,7 +40,7 @@ export const HubConnectionContextProvider = (props: PropsWithChildren<any>) => {
     }, [connectionRef])
 
     return (
-        <HubConnectionContext.Provider value={{connection: connectionRef}}>
+        <HubConnectionContext.Provider value={{ connection: connectionRef }}>
             {props.children}
         </HubConnectionContext.Provider>
     )

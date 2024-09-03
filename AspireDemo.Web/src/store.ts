@@ -1,7 +1,7 @@
-﻿import {configureStore} from '@reduxjs/toolkit'
+﻿import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
 import messageReducer from './reducers/messageReducer'
-import userReducer from "./reducers/userReducer.ts";
+import userReducer from "./reducers/userReducer";
 
 const store = configureStore({
     reducer: {
