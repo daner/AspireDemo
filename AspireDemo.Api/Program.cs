@@ -41,7 +41,6 @@ builder.Services.AddTransient<IMessageSender<EmailMessage>>(sp =>
 builder.Services.Configure<OpenWeatherMapOptions>(builder.Configuration.GetSection(nameof(OpenWeatherMapOptions)));
 
 builder.Services.AddSignalR()
-    .AddStackExchangeRedis(builder.Configuration.GetConnectionString("cache") ?? "")
     .AddHubInstrumentation();
 
 builder.AddRabbitMQClient("rabbit");
@@ -82,3 +81,6 @@ app.MapEmailApi();
 app.Run();
 
 await Log.CloseAndFlushAsync();
+
+
+public partial class Program { }

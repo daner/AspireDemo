@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspireDemo.MigrationService
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspireDemo.EmailWorker", "AspireDemo.EmailWorker\AspireDemo.EmailWorker.csproj", "{13754112-C21F-4591-9779-F48939E99714}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireDemo.Api.IntegrationTests", "AspireDemo.Api.IntegrationTests\AspireDemo.Api.IntegrationTests.csproj", "{4916BE4A-5B9F-465F-A8DE-801A11FED5CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{13754112-C21F-4591-9779-F48939E99714}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13754112-C21F-4591-9779-F48939E99714}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13754112-C21F-4591-9779-F48939E99714}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4916BE4A-5B9F-465F-A8DE-801A11FED5CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4916BE4A-5B9F-465F-A8DE-801A11FED5CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4916BE4A-5B9F-465F-A8DE-801A11FED5CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4916BE4A-5B9F-465F-A8DE-801A11FED5CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
